@@ -1,0 +1,101 @@
+﻿@model MangaSite.Models.Comic
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<section class="container my-5">
+    
+    <div class="row mt-5">
+        <div class="col-lg-5 col-md-12 col-12">
+            <img class="mx-auto d-block img-fluid w-75 m-auto" src="@Model.ImgURL" />
+        </div>
+        <div class="col-lg-7 col-md-12 col-12 ">
+            <h1 class="mb-3">@Model.Name</h1>
+            <div class="mt-1 mb-0 small">
+                @foreach (var genre in Model.Genres)
+                {
+                    <button class="btcolor btn btn-secondary btn-sm text-light rounded-5 my-1 genre" type="button" onclick="location.href='@Url.Action("Details","Genres", new { id = genre.Id})'">
+                        @genre.Name
+                    </button>
+                }
+            </div>
+            <p class="mt-2"><b>Author: </b><a class="link-light" href="@Url.Action("Details","Authors", new { id = Model.Author.AuthorId})">@Model.Author.AuthorName</a></p>
+            <p><b>Type: </b>@Model.Type.TypeName</p>
+            <p><b>Serialized: </b>@Model.Serialized</p>
+            
+            <p><i class="bi bi-star-fill"></i> @Model.Rating/10</p>
+            <p>@Model.Descripion</p>
+            <div class="flex-column mt-4">
+                @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                {
+                    <button class="btcolor btn btn-outline-light btn-sm mt-2 text-light w-25" type="button" onclick="location.href='@Url.Action("Edit", new { id = Model.Id })'">
+                        Edit
+                    </button>
+                    <button class="btcolor btn btn-outline-light btn-sm mt-2 text-light w-25" type="button" onclick="location.href='@Url.Action("Delete", new { id = Model.Id })'">
+                        Delete
+                    </button>
+                    <button class="btcolor btn btn-outline-light btn-sm mt-2 text-light w-25" type="button" onclick="location.href='@Url.Action("AddGenre", new { id = Model.Id })'">
+                        Add Genre
+                    </button>
+
+                }
+                @using(Html.BeginForm("AddToFavorites","FavotiresLists", FormMethod.Post))
+                {
+
+                @Html.Hidden("id", Model.Id)
+                <button class="btcolor btn btn-outline-light btn-sm mt-2 text-light w-25" type="submit">
+                    Add to favorites
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <hr />
+        <p>
+            @Model.Comments.Count Comments
+        </p>
+
+        @using (Html.BeginForm("AddComment", "Comments"))
+        {
+            @Html.HiddenFor(m=>m.Id)
+
+            @Html.TextArea("Text", new { @class= "form-control",@placeholder="Leave a comment..." });
+            <button class="btn btn-outline-light mt-3" type="submit">Add Comment</button>
+        }
+
+    </div>
+    @foreach(var item in Model.Comments)
+            {
+                
+                <div class="card mb-3 bg-transparent text-light">
+          <div class="card-body">
+            <div class="d-flex flex-start">
+              
+              <div class="w-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="text-primary fw-bold mb-0">
+                      <i class="bi bi-person-circle"></i> @item.UserName
+                    
+                  </h6>
+                  <p class="mb-0">@item.Time</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-light ms-2">@item.Text</span>
+                    @if (item.UserName == User.Identity.Name || User.IsInRole("Admin") || User.IsInRole("Editor"))
+                    {
+                        <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete","Comments", new { id = item.Id })'">Delete</button>
+                    }
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+            }
+    
+    
+</section>

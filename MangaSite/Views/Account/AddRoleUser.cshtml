@@ -1,0 +1,16 @@
+﻿@model MangaSite.Models.AddUserRole
+@{
+    ViewBag.Title = "AddRoleUser";
+}
+
+<h2>Add a Role to a User</h2>
+@using (Html.BeginForm("AddRoleUser", "Account"))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email , new { @class = "form-label" })
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" , @placeholder = "Enter an email..." })
+        @Html.DropDownListFor(model => model.Role, new SelectList(Model.roles), "Select a Role ", new { @class = "form-select mt-2"})
+        <button type="submit" class="btn btn-outline-light mt-2">Add</button>
+    </div>
+
+}

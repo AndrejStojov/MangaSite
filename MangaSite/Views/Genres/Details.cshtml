@@ -1,0 +1,33 @@
+﻿@model MangaSite.Models.Genre
+
+@{
+    ViewBag.Title = "Details";
+}
+<h2 class="mt-5 mb-5">Your search: @Model.Name</h2>
+
+<section>
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model.Comics)
+            {
+                <div class="card mt-3 m-3" style="width: 18rem; background-color: #2c242c">
+                    <img style="max-height:350px" src="@item.ImgURL" class="card-img-top mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title text-light text-truncate">@Html.ActionLink(item.Name, "Details", "Comics", new { id = item.Id }, new { @class = "nav-link text-light" })</h4>
+                        <p class="text-light"><i class="bi bi-star-fill text-warning"></i> @item.Rating/10</p>
+                        <div class="mt-1 mb-0 small">
+                            @foreach (var genre in item.Genres)
+                            {
+                                <button class="btcolor btn btn-secondary btn-sm text-light rounded-5 my-1 genre" type="button" onclick="location.href='@Url.Action("Details","Genres", new { id = genre.Id})'">
+                                    @genre.Name
+                                </button>
+                            }
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,88 @@
+﻿@model MangaSite.Models.ComicGenreViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+
+<section>
+    <div class="container">
+        <div class=" mb-4 mt-4">
+            <div class="d-inline">
+                <div class="dropdown d-inline">
+                    <button class="btcolor btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select a genre
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach (var genre in Model.Genres)
+                        {
+                            <li><a class="dropdown-item" href="@Url.Action("Details","Genres", new { id = genre.Id })">@genre.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="d-inline">
+                <div class="dropdown d-inline">
+                    <button class="btcolor btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select a type
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach (var typec in Model.typeCs)
+                        {
+                            <li><a class="dropdown-item" href="@Url.Action("Details","TypeCs", new { id = typec.TypeCId })">@typec.TypeName</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+            {
+                <div class="d-inline">
+                    <button class="btcolor btn btn-secondary" type="button" onclick="location.href='@Url.Action("Create","Comics")'">
+                        Create new
+                    </button>
+                </div>
+            }
+
+
+        </div>
+       
+    </div>
+</section>
+
+
+
+    <section>
+        <div class="container">
+            @if (Model.Comics.Count() == 0)
+            {
+                <h1>Nothing was found <i class="bi bi-emoji-frown-fill"></i></h1>
+
+            }
+        <div class="row">
+            @foreach (var item in Model.Comics)
+            {
+                <div class="card mt-3 m-3" style="width: 18rem; background-color: #2c242c">
+                    <img style="max-height:350px" src="@item.ImgURL" class="card-img-top mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title text-light text-truncate">@Html.ActionLink(item.Name, "Details", "Comics", new { id = item.Id } ,new { @class = "nav-link text-light" })</h4>
+                        <p class="text-light"><i class="bi bi-star-fill text-warning"></i> @item.Rating/10</p>
+                        <div class="mt-1 mb-0 small">
+                            @foreach (var genre in item.Genres)
+                            {
+                                <button class="btcolor btn btn-secondary btn-sm text-light rounded-5 my-1 genre" type="button" onclick="location.href='@Url.Action("Details","Genres", new { id = genre.Id})'">
+                                    @genre.Name
+                                </button>
+                            }
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+        </div>
+        </div>
+    </section>
+
+

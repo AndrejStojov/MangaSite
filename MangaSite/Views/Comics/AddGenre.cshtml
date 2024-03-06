@@ -1,0 +1,13 @@
+﻿@model MangaSite.Models.ComicGenre
+@{
+    ViewBag.Title = "AddGenre";
+}
+
+<h2>Add a Genre</h2>
+@using (Html.BeginForm("AddGenre", "Comics")) { 
+    <div class="form-group">
+        @Html.DropDownListFor(m=>m.GenreId,new SelectList(Model.Genres,"Id","Name"), new { @class="form-control"})
+        @Html.HiddenFor(m => m.ComicId)
+        <button class="btn btn-outline-primary btn-sm mt-3 text-light" type="submit">Add</button>
+    </div>
+}

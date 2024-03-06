@@ -1,0 +1,57 @@
+﻿@model MangaSite.Models.Author
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<section class="container my-5">
+
+    <div class="row mt-5">
+        <div class="col-lg-5 col-md-12 col-12">
+            <img class="mx-auto d-block img-fluid w-50 h-50 m-auto rounded-circle" src="@Model.ImgURL" />
+        </div>
+        <div class="col-lg-7 col-md-12 col-12 ">
+            <h1 class="mb-3">@Model.AuthorName</h1>
+            
+            
+            
+            <p>@Model.Bio</p>
+            <div class="flex-column mt-4">
+                @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                {
+                    <button class="btcolor btn btn-outline-light btn-sm mt-2 w-25" type="button" onclick="location.href='@Url.Action("Edit", new { id = Model.AuthorId })'">
+                        Edit
+                    </button>
+                    <button class="btcolor btn btn-outline-light btn-sm mt-2 w-25" type="button" onclick="location.href='@Url.Action("Delete", new { id = Model.AuthorId })'">
+                        Delete
+                    </button>
+                    
+                }
+            </div>
+        </div>
+        <hr class="mt-3" />
+        <div class="row mt-3">
+            <h4>Other manga/comics by this author:</h4>
+            @foreach (var item in Model.Comics)
+            {
+                <div class="card mt-3" style="width: 18rem; background-color: #2c242c">
+                    <img style="max-height:350px" src="@item.ImgURL" class="card-img-top mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title text-light text-truncate">@Html.ActionLink(item.Name, "Details", "Comics", new { id = item.Id }, new { @class = "nav-link text-light" })</h4>
+                        <p class="text-light"><i class="bi bi-star-fill text-warning"></i> @item.Rating/10</p>
+                        <div class="mt-1 mb-0 small">
+                            @foreach (var genre in item.Genres)
+                            {
+                                <button class="btcolor btn btn-secondary btn-sm text-light rounded-5 my-1 genre" type="button" onclick="location.href='@Url.Action("Details","Genres", new { id = genre.Id})'">
+                                    @genre.Name
+                                </button>
+                            }
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
